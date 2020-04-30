@@ -1,6 +1,7 @@
 '''
 Author: Matthew Burns
 DS: OBurnsy22#7248
+4/30/2020
 '''
 
 import discord
@@ -17,7 +18,7 @@ cwd = str(cwd)
 print(f"{cwd}\n-----")
 
 #setup
-secret_file = json.load(open(cwd+'/bot_config/secrets.json'))  #loads json file
+secret_file = json.load(open(cwd+'/bot_config/config.json'))  #loads json file
 bot = commands.Bot(command_prefix='.', case_insensitive=True)  #hsetting up the bot
 bot.config_token = secret_file['token'] #configure the secret token
 bot.remove_command("help")
@@ -138,27 +139,15 @@ async def on_member_join(member):
     messageChannel = discord.utils.get(member.guild.channels, name='messages')
     await messageChannel.send(f"Welcome to the server {member.mention}!")
 
-#sends error message if incorrect command is entered
+#error handler
 @bot.event
 async def on_command_error(error, ctx):
-    await error.send("No such command")
+        await error.send("Error: No such command, or missing required arguments")
 
 @bot.event
 async def on_message(message):
-    #if message.author.id == 208835703235149824:
-     #   await message.send("Hello Phil")
     await bot.process_commands(message)
 
 
 #runs bot with its respective token
 bot.run(bot.config_token)
-
-#note:
-#   name of function is name of command
-#   #can ust 'message.attachment' to see if what was just sent was an image or not
-#   server ID: 656229437183885312 (change this when it gets added to bean bungalow, as well as the welcome function
-#   figure out how to update bots name and picture
-#   set thumnail pic for show command
-#   on_message has priority over commands, so to get around that, if nothing triggers in on_message function, 'bot.process_commands' will then check if the message is a command, and run it.
-#   Add in if check on kick command to if someone tries to kick my prof id to not let it happen
-#   pull random pics from tylers google drive 
