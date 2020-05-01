@@ -43,6 +43,7 @@ async def help(ctx):
     embed.add_field(name='.coin', value='Flips a coin', inline=False)
     embed.add_field(name='.dice', value='Rolls a dice', inline=False)
     embed.add_field(name='.ranlink', value='Get a random link from the Beanboy CACHE', inline=False)
+    embed.add_field(name='.smash', value='Peep some exclusive TOP-TIER gameplay', inline=False)
     embed.add_field(name='.clear [num]', value='Clears a specified number of messages from the channel its used in, default value is 5 [ADMIN ONLY]', inline=False)
     embed.add_field(name='.exterminate @[name]', value='Kicks specified member from server [ADMIN ONLY]', inline=False)
     await ctx.send(embed=embed)
@@ -80,6 +81,23 @@ async def google(ctx, *, searchquery : str):
         await ctx.send('<https://www.google.com/search?tbm=isch&q={}>'.format(urllib.parse.quote_plus(searchquery[7:])))
     else:
         await ctx.send('<https://www.google.com/search?q={}>'.format(urllib.parse.quote_plus(searchquery)))
+
+#gets random smash clip
+@bot.command()
+async def smash(ctx):
+    clips = ['https://drive.google.com/file/d/11JZ9Q0mZ4MQyS5XTeSY89MnVSjOQPXtv/view',
+             'https://drive.google.com/open?id=1IZTjOcCe6oU18pAUhn6Lz-6Q1jRzVTEG', 'https://drive.google.com/open?id=16TK7lgOoTxKCvOeEmIYGp-TELiRRk4bj', 'https://drive.google.com/open?id=150uvf9WSskMh879UqSrNBrUT3vTMxpUw', 'https://drive.google.com/open?id=1gIMYoyTm2ZRCyVKW6bVzDnEAXMFVww2U', 'https://drive.google.com/open?id=14C7Rk9yWnx9SxjJwtfiWwtmemZ9_pyEg',
+             'https://drive.google.com/open?id=1eRI1zBcdaj0bSXr4SGkqahFKzQP7h5rW', 'https://drive.google.com/open?id=1aCNbcfVI3NV1EaD7BPLCFlxghJ-Oc7_b', 'https://drive.google.com/open?id=1Hh7xZMAYzcw-E3z7juj5X86ysJZgNPqe', 'https://drive.google.com/open?id=1Z0V91DS3ufnou9xNTo2_mpA0Xs19rOD_', 'https://drive.google.com/open?id=1SjygM3dmyIFXSg8EEXyGOBJZ-4C-2r9M', 
+             'https://drive.google.com/open?id=1b1QOn3sfAtPcziZtkAD71Zr75qY_tVU0', 'https://drive.google.com/open?id=1IkJtYBSfpdRFvuKXFFYIJBGFihojnya0', 'https://drive.google.com/open?id=1C8N1Trds5q2gGoQVe59pgRqM8kEGWGe4', 'https://drive.google.com/open?id=1XSZFr70JVN0amCgNAN4GklzJtu_9IFxH', 'https://drive.google.com/open?id=10xlM6VHaUNbNwVc-1jBGe8kOtyh8Z-PC', 
+             'https://drive.google.com/open?id=1JJ-qxs6gbmjdN3NIqClz02C0YQuxIxa5', 'https://drive.google.com/open?id=1FqEEbK5hqXNkBDTD2KqoZ5JVUz92hF99', 'https://drive.google.com/open?id=1G0M2zDcDkuosKuRBhe-_ypgqMCKK0PE7', 'https://drive.google.com/open?id=19cVaT5qFeRr3MGNpxwnzy_jfXQvc1SGQ', 'https://drive.google.com/open?id=1ifPnKRc6lA_Ypf88FcjcbJ1oahbBma_u', 
+             'https://drive.google.com/open?id=1jgVnigQAmApSlSvDMrHzXyPdKZa5MShr', 'https://drive.google.com/open?id=1gATFhDU2FgoIhh0MeTorjhnbw9WLgzQ3', 'https://drive.google.com/open?id=1EDIT-8jhYlhP9ehHznMyz7tEc0cDpsHT', 'https://drive.google.com/open?id=1HXUkNs3W60QDQOHdSIrUEy22VcGa6-_j', 'https://drive.google.com/open?id=1b-4F8Y4ht3NlheqdArr--HtzDxSDPa1a', 
+             'https://drive.google.com/open?id=1wQfLpMpo7luw5RUHxpHfjGtRIooEkmLv', 'https://drive.google.com/open?id=1-3ZwEfo354ILBZgmSKb_shl303beFyEc', 'https://drive.google.com/open?id=15yHeciIfsbqhB0V_4Bm8X9CwZmhZPKLY', 'https://drive.google.com/open?id=1o_0Q_w_ILwgTipxJ0A5NHIUnH8AfrFiL', 'https://drive.google.com/open?id=1cTWhexBwADDpw8H2nk6h4--45Og3Adiz', 
+             'https://drive.google.com/open?id=1PiIrqDlCJPzI2X0mNzjMt4aNCy-6pbkK', 'https://drive.google.com/open?id=1f3Pv7oFkykljhIqtfJRC5zN_TXn2iSNq', 'https://drive.google.com/open?id=14zTphmCp2f6Vjf2R-1fv7SA7GajREiED', 'https://drive.google.com/open?id=11Dm8OoASOVYG-xZocKfc-uGTpkcWG7TT', 'https://drive.google.com/open?id=1rItXN6hJO2cJ5qqRCa0T9-tl50H8-Cqg', 
+             'https://drive.google.com/open?id=1wHlDxci-jIBsW_aHODXetDWEiO6KHanK', 'https://drive.google.com/open?id=1L8h-moXUt8oDXOuX-RlQKaG-7KvoKT4Z', 'https://drive.google.com/open?id=17WDogVloq6-TaOCjGT15lw4gOzpnJSvS', 'https://drive.google.com/open?id=1pEcAfigGrZ5bML2VgUS1X0ozr4IRzle_', 'https://drive.google.com/open?id=1zKDsNq8e_VsgVX8f32PHBtiLVkU4-rqB', 
+             'https://drive.google.com/open?id=1xHRHWEJYnM4Get4S_A8gJ45L351y5qyY', 'https://drive.google.com/open?id=1vIrAzxkwfKOwfHJ3Mw9HgM_h4-Taqpau', 'https://drive.google.com/open?id=1T0QKmIMeUbk8xxchFfltC4KIsV1wEiA3', 'https://drive.google.com/open?id=1MX7NcOPHQqTbO1LNyudnRH2pY3UO5wu6', 'https://drive.google.com/open?id=1RzH4EOEZo-hc7Xwb1QBHRZUK_sW36w-9', 
+             'https://drive.google.com/open?id=1SIlNEk8y2XHldqyxYdky322l8cgjfwpb']
+    await ctx.send(random.choice(clips))
+
 
 #kicks specified member from server [ADMIN ONLY]
 @bot.command()
