@@ -10,7 +10,9 @@ from discord.ext import commands
 from pathlib import Path
 import json
 import random
+import urllib.request
 import urllib.parse
+import re
 
 #ensures bot is in current working directory
 cwd = Path(__file__).parents[0]
@@ -95,7 +97,14 @@ async def smash(ctx):
              'https://drive.google.com/open?id=1PiIrqDlCJPzI2X0mNzjMt4aNCy-6pbkK', 'https://drive.google.com/open?id=1f3Pv7oFkykljhIqtfJRC5zN_TXn2iSNq', 'https://drive.google.com/open?id=14zTphmCp2f6Vjf2R-1fv7SA7GajREiED', 'https://drive.google.com/open?id=11Dm8OoASOVYG-xZocKfc-uGTpkcWG7TT', 'https://drive.google.com/open?id=1rItXN6hJO2cJ5qqRCa0T9-tl50H8-Cqg', 
              'https://drive.google.com/open?id=1wHlDxci-jIBsW_aHODXetDWEiO6KHanK', 'https://drive.google.com/open?id=1L8h-moXUt8oDXOuX-RlQKaG-7KvoKT4Z', 'https://drive.google.com/open?id=17WDogVloq6-TaOCjGT15lw4gOzpnJSvS', 'https://drive.google.com/open?id=1pEcAfigGrZ5bML2VgUS1X0ozr4IRzle_', 'https://drive.google.com/open?id=1zKDsNq8e_VsgVX8f32PHBtiLVkU4-rqB', 
              'https://drive.google.com/open?id=1xHRHWEJYnM4Get4S_A8gJ45L351y5qyY', 'https://drive.google.com/open?id=1vIrAzxkwfKOwfHJ3Mw9HgM_h4-Taqpau', 'https://drive.google.com/open?id=1T0QKmIMeUbk8xxchFfltC4KIsV1wEiA3', 'https://drive.google.com/open?id=1MX7NcOPHQqTbO1LNyudnRH2pY3UO5wu6', 'https://drive.google.com/open?id=1RzH4EOEZo-hc7Xwb1QBHRZUK_sW36w-9', 
-             'https://drive.google.com/open?id=1SIlNEk8y2XHldqyxYdky322l8cgjfwpb']
+             'https://drive.google.com/open?id=1SIlNEk8y2XHldqyxYdky322l8cgjfwpb', 'https://drive.google.com/open?id=1_E5xXkjspe7396zbqTKM4QlpKj2qqPIz', 'https://drive.google.com/open?id=13O81Aady3FrvlRSFYuRP2gCugTfHAbeF', 'https://drive.google.com/open?id=1ADrA6W0AVVoqkLJnXepiXelQVOR7Czol', 'https://drive.google.com/open?id=1XjJEXqRCY1BJe5uAgLcE7k3YoBhNHJWD', 
+             'https://drive.google.com/open?id=1Iyz_F8nCqXhawxfHZrGrdkTCbY06TH68', 'https://drive.google.com/open?id=1mTd8N9kOeGuuoVZludMM3szEN2dfHoFj', 'https://drive.google.com/open?id=18GlXDq8xIsDjQ-gOJ-EFRZUf35Mp_Avf', 'https://drive.google.com/open?id=1NhUNfsfYRAgrRV04z5H5UcHcidmLdDP9', 'https://drive.google.com/open?id=13cFP4SBv1j_xXqqnqrfZQpcvgADElBDc', 
+             'https://drive.google.com/open?id=1UyuRvCWWQh3Ov5-ZaiEWAaVGz9tKBmoT', 'https://drive.google.com/open?id=1bBRtI9nNrAv-qkhayVd4ybAR7K8vQbAC', 'https://drive.google.com/open?id=18CO0laeXD1Ei5xDB4L9aaWSlQqAf6QQu', 'https://drive.google.com/open?id=1umbeRiuk7AK_I9tWjNZ0olbnDvV01Hy0', 'https://drive.google.com/open?id=1FWEN5142-7BEQ_A1_C8O77VxFeQYiLMq', 
+             'https://drive.google.com/open?id=1eNNzMRpzp4WwUOdO38vtL0c0wPcV6V2a', 'https://drive.google.com/open?id=1A8x2UejZPij3nGAAt6ZsIBxVTeiydUjK', 'https://drive.google.com/open?id=1FSkk8Ny15MVLBRIA1YFlCkTnnduHpd2F', 'https://drive.google.com/open?id=1_F_O2DLggZjIaraWlXcYkTDe90Qvw2sC', 'https://drive.google.com/open?id=1HLQuTcXj9wSBgrBRzxHcBX5cghkI3XNp', 
+             'https://drive.google.com/open?id=1N4RYTqBzakQpe1-SikirOGSizRETwIkv', 'https://drive.google.com/open?id=19aN3XzJCaLAQ4rNTP8vOF0VehWL8lq--', 'https://drive.google.com/open?id=1MRblMR4lAkdeZjuIqYqSDgodaG1v7yPA', 'https://drive.google.com/open?id=16Mu6_lhutFL73C8dE4RE9MaVxlplV9NE', 'https://drive.google.com/open?id=1EqyTo9sOmeETRyGbHvanPImGlp11OUkV', 
+             'https://drive.google.com/open?id=1mfV_IjgU70pqz8sKGaXVWJ2NM0uISRpw', 'https://drive.google.com/open?id=1bY8m7gS9XbaIZjBRHSl5F4VRpffjyx1L', 'https://drive.google.com/open?id=16kiFmJM16wXnkAXpmdA6ZuJ0LHXR8lye', 'https://drive.google.com/open?id=1Yq1alvEeh2BZZRKVPc-LmhFtIw6nymf0', 'https://drive.google.com/open?id=1I7KSHHhRgolz-4ZuMDWKYxb5HlPE3tPX', 
+             'https://drive.google.com/open?id=1mxtJz1nhuwMr3PfGQ8LfTg8NRhENJcpv', 'https://drive.google.com/open?id=18FBxAqbls6kz3_b7HNywsmYfVtHLuzx0', 'https://drive.google.com/open?id=1pIg9glFJYPaqVB-riw2JoSVdtvuam2K8', 'https://drive.google.com/open?id=1CjjjWvxDjHwqk3rAWmTrvpzBnYc0uvGx', 'https://drive.google.com/open?id=1-1kV2vgwZADeTh2iBzPb0hHW2qxxODph', 
+             'https://drive.google.com/open?id=1qt1ILG16z4y3cH2qZBTCwlYcYznwI9A5', 'https://drive.google.com/open?id=11LK3-cbkYLrwi8z4d2IwFZpHy7PBjqXd', 'https://drive.google.com/open?id=1fsl80tHrsywpmpOAJo7_X79JOlFVMv6L', 'https://drive.google.com/open?id=15L25UPKEzoaW6FtgpI6_CiXw6cqUE54-', 'https://drive.google.com/open?id=1AdK-xkzO7Njrv_IAjr0HuIjYOn6Lc36O']
     await ctx.send(random.choice(clips))
 
 
@@ -162,10 +171,15 @@ async def on_member_join(member):
 async def on_command_error(error, ctx):
         await error.send("Error: No such command, or missing required arguments")
 
+#responds to certain messages in the chat
 @bot.event
 async def on_message(message):
+    if message.author.id == 208835703235149824:
+        emojis = ['(ノಠ益ಠ)ノ彡┻━┻', 'ヽ( ಠ益ಠ )ﾉ', '(-■_■)', '⊜_⊜', '눈_눈']
+        x = random.randint(1, 2)
+        if x == 1:
+            await message.channel.send(random.choice(emojis))
     await bot.process_commands(message)
-
 
 #runs bot with its respective token
 bot.run(bot.config_token)
